@@ -1,4 +1,4 @@
-package com.digitalhomeland.storeadmin;
+package com.digitalhomeland.inventory;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,46 +11,38 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.digitalhomeland.storeadmin.R;
-import com.digitalhomeland.storeadmin.models.Employee;
-import com.digitalhomeland.storeadmin.models.Team;
-import com.digitalhomeland.storeadmin.models.User;
+import com.digitalhomeland.inventory.models.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 
-public class EmployeeApproval extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity {
 
     //String storeId = "";
-    static TextView firstName, middleName, lastName, phone, email, aadharId, employeeId, teamName, designation;
-    Spinner teamSpinner;
+    TextView firstName, middleName, lastName, phone, email, aadharId, employeeId;
     Context mContext;
     String response = "{\"reciever\":\"add\", \"params\": { \"employee\" :{";
     static DatabaseHandler db;
     private static Volley_Request postRequest;
     static User user;
-    static Activity mActivity;
-    static String  storeKey,employeeIdStr= "";
-    static Employee empr = null;
+    static Activity mActivity ;
+    static String  storeKey,dailogInput = "";
+    static String track = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_employee_approval);
+        setContentView(R.layout.activity_signup);
         getWindow().setBackgroundDrawableResource(R.drawable.btr);
         mContext = getApplicationContext();
-        mActivity = EmployeeApproval.this;
+        mActivity = SignupActivity.this;
         db = new DatabaseHandler(this);
-
         firstName = (TextView) findViewById(R.id.su_first_name);
         middleName = (TextView) findViewById(R.id.su_middle_name);
         lastName = (TextView) findViewById(R.id.su_last_name);
@@ -58,37 +50,20 @@ public class EmployeeApproval extends AppCompatActivity {
         email = (TextView) findViewById(R.id.su_email);
         aadharId = (TextView) findViewById(R.id.su_aadhar_id);
         employeeId = (TextView) findViewById(R.id.su_employee_id);
-        teamName = (TextView) findViewById(R.id.su_team);
-        designation = (TextView) findViewById(R.id.su_designation);
 
-        Bundle bundle = getIntent().getExtras();
-        employeeIdStr = bundle.getString("employeeId");
-        empr = db.getEmployeeById(employeeIdStr);
-        setViews(empr);
+        String req = "{\"reciever\":\"empKey\", \"params\" :{ \"storeId\":\"" + db.getStore().getStoreId() + "\"}}";
+        postRequest = new Volley_Request();
+        postRequest.createRequest(mContext, mContext.getResources().getString(R.string.mJSONURL_store), "POST", "loadKey", req);
 
-        ArrayList<Team> tmList = db.getAllTeams();
-        String [] teamNames = new String[tmList.size()];
-        for(int i =0; i<tmList.size() ; i++){
-            teamNames[i] = tmList.get(i).getName();
-        }
-        teamSpinner = (Spinner) findViewById(R.id.su_team_spinner);
-
-        //ArrayAdapter<CharSequence> closingDayAdapter = ArrayAdapter.(this, daysOfW, R.layout.spinner_second_page);
-        ArrayAdapter<String> teamAdapter = new ArrayAdapter<String>
-                (this, R.layout.spinner_second_page,
-                        teamNames);
-        teamAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        teamSpinner.setAdapter(teamAdapter);
-
-        Button approvalBtn =(Button) findViewById(R.id.approve_button);
-        approvalBtn.setOnClickListener(new View.OnClickListener(){
+        Button signUp =(Button) findViewById(R.id.sign_in_button);
+        signUp.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                validateInput(firstName, lastName, phone, email, aadharId, employeeId, designation);
+                validateInput(firstName, lastName, phone, email, aadharId, employeeId);
                 LayoutInflater layoutInflaterAndroid = LayoutInflater.from(mContext);
                 View mView = layoutInflaterAndroid.inflate(R.layout.teacher_input_dailog_box, null);
-                AlertDialog.Builder alertDialogBuilderTeacherInput = new AlertDialog.Builder(EmployeeApproval.this, R.style.AlertDialogTheme);
+                AlertDialog.Builder alertDialogBuilderTeacherInput = new AlertDialog.Builder(SignupActivity.this, R.style.AlertDialogTheme);
                 alertDialogBuilderTeacherInput.setView(mView);
                 TextView removeStudentText = (TextView) mView.findViewById(R.id.dialogTitle);
                 removeStudentText.setText("Enter StoreID :");
@@ -100,18 +75,14 @@ public class EmployeeApproval extends AppCompatActivity {
                                 // ToDo get user input here
                                 Log.d("myTag", "dailog input : " + userInputDialogEditText.getText() + " : " +  db.getStore().getStoreId());
                                 // if it is equal to schoolId recieved from page 1
-                                if(userInputDialogEditText.getText().toString().equals(db.getStore().getAdminId())) {  //fix later
+                                if(userInputDialogEditText.getText().toString().equals(db.getStore().getStoreId())) {  //fix later
+                                    response += "\"" + "firstName" + "\":\"" + firstName.getText().toString() + "\"," + "\"" + "middleName" + "\":\"" + middleName.getText().toString() + "\"," + "\"" + "lastName" + "\":\"" + lastName.getText().toString() + "\", \""  + "phone" + "\":\"" + phone.getText().toString() + "\",\""  + "email" + "\":\"" + email.getText().toString() + "\"," + "\"" + "aadharId" + "\":\"" + aadharId.getText().toString() + "\"," + "\"" + "employeeId" + "\":\"" + employeeId.getText().toString() + "\"," + "\"" + "storeId" + "\":\"" + userInputDialogEditText.getText() + "\",";
+                                    response = response.substring(0, response.length()-1);
+                                    response += "}}}";
                                     // setPreferences();
-                                    String request;
-                                    if(empr.getIsManager().equals("true")) {
-                                        request = "{\"reciever\":\"empApprove\", \"params\":{\"employeeId\":\"" + employeeIdStr + "\",\"storeId\":\"" + db.getStore().getStoreId() + "\",\"designation\":\"" + designation.getText().toString() + " \",\"teamname\":\"" + teamSpinner.getSelectedItem().toString() + " \",\"managerId\":\"" + "SELF" + "\"}}";
-                                    }else {
-                                        request = "{\"reciever\":\"empApprove\", \"params\":{\"employeeId\":\"" + employeeIdStr + "\",\"storeId\":\"" + db.getStore().getStoreId() + "\",\"designation\":\"" + designation.getText().toString() + " \",\"teamname\":\"" + teamSpinner.getSelectedItem().toString() + " \",\"managerId\":\"" + db.getTeamByName(teamSpinner.getSelectedItem().toString()).getManagerId() + "\"}}";
-                                          }
-                                    Log.d("myTag", "adding response : " + request);
+                                    Log.d("myTag", "adding response : " + response);
                                     postRequest = new Volley_Request();
-                                    postRequest.createRequest(mContext, getResources().getString(R.string.mJSONURL_employee), "POST", "ApproveEmployee", request);
-
+                                    postRequest.createRequest(mContext, getResources().getString(R.string.mJSONURL_employee), "POST", "SignActivityEmployee",response);
                                 }
                             }
                         })
@@ -130,32 +101,25 @@ public class EmployeeApproval extends AppCompatActivity {
         });
     }
 
-    public static void setViews(Employee emp){
-        firstName.setText(emp.getFirstName());
-        //set them un editable
-        middleName.setText(emp.getMiddleName());
-        lastName.setText(emp.getLastName());
-        phone.setText(emp.getPhone());
-        email.setText(emp.getEmail());
-        aadharId.setText(emp.getAadharId());
-        employeeId.setText(emp.getEmployeeId());
+    public static void getLoadKeyResponse(String response){
+        try{
+            JSONObject responseObj = new JSONObject(response);
+            storeKey = responseObj.getString("joinKey");
+            }catch(JSONException e){
+            Log.d("myTag", "json error " ,e);
+        }
     }
 
-    public static void getApprovalResponse(String responseString){
+    public static void getSignUpResponse(String responseString){
         try{
             JSONObject responseObj = new JSONObject(responseString);
-            String team =  responseObj.getString("teamName");
-            team = team.substring(0, team.length() - 1);
-            Log.d("myTag", "searching team : " + team);
-            if(responseObj.getString("isManager").equals("true") ){
-                int resp = db.addManagerTOTeam(responseObj.getString("employeeId"), responseObj.getString("firstName") + " " + responseObj.getString("middleName") + " " + responseObj.getString("lastName"), team);
-                Log.d("myTag", "updating team : " + resp );
+            if(!responseObj.has("success")) {
+                user = new User(responseObj.getString("_id"), responseObj.getString("firstName"), responseObj.getString("middleName"), responseObj.getString("lastName"), responseObj.getString("phone"), responseObj.getString("email"), responseObj.getString("aadharId"), responseObj.getString("employeeId"), responseObj.getString("storeId"));
+                db.addUsers(user);
             }
-            if(db.getTeamByName(team) != null) {
-                int resp = db.updateEmp(responseObj.getString("employeeId"), team, db.getTeamByName(team).getManagerId(), responseObj.getString("designation"));
-                Log.d("myTag", "updating emp : " + resp);
-            }
-                Intent  i = new Intent(mActivity, UnapprovedView.class);
+            //List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            // Log.d("myTag", "sync:addingApplication: " + testAddress.getAddressLine(0).equals(locRes.getAddress()) + " : " + locRes.getLat().equals(testLoc.getLatitude()) + " : " + locRes.getLong().equals(testLoc.getLongitude()));
+            Intent i = new Intent(mActivity, DashboardActivity.class);
             mActivity.startActivity(i);
         }catch(JSONException e){
             Log.d("myTag", "json error " ,e);
@@ -163,7 +127,7 @@ public class EmployeeApproval extends AppCompatActivity {
     }
 
 
-    public void validateInput(TextView firstName, TextView lastName, TextView phone, TextView email, TextView aadharId, TextView employeeId, TextView designation){
+    public void validateInput(TextView firstName, TextView lastName, TextView phone, TextView email, TextView aadharId, TextView employeeId){
         if(firstName.getText().length() == 0){
             firstName.requestFocus();
             firstName.setError("Field cannot be left empty");
@@ -201,10 +165,6 @@ public class EmployeeApproval extends AppCompatActivity {
             employeeId.requestFocus();
             employeeId.setError("Field cannot be left empty");
         }
-        if(designation.getText().length() == 0){
-            employeeId.requestFocus();
-            employeeId.setError("Field cannot be left empty");
-        }
     }
 
     // validate first name
@@ -239,6 +199,11 @@ public class EmployeeApproval extends AppCompatActivity {
 // onClick of button perform this simplest code.
         Matcher matcher = Patterns.EMAIL_ADDRESS.matcher(email);
         return matcher.matches();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
     }
 }
 

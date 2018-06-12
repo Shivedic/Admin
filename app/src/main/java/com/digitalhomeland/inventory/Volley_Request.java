@@ -1,4 +1,4 @@
-package com.digitalhomeland.storeadmin;
+package com.digitalhomeland.inventory;
 
 import android.content.Context;
 import android.util.Log;
@@ -109,16 +109,6 @@ public class Volley_Request {
                                         SignupActivity.getSignUpResponse(responseString);
                                     else if (returnPathCopy == "getEmployees"){}
                                         //DashboardActivity.getEmpResponse(responseString);
-                                    else if (returnPathCopy == "addTeam")
-                                        DashboardActivity.addTeamResponse(responseString);
-                                    else if (returnPathCopy == "getUnapprovedEmp")
-                                        DashboardActivity.getUnapprovedResponse(responseString);
-                                    else if (returnPathCopy == "ApproveEmployee")
-                                        EmployeeApproval.getApprovalResponse(responseString);
-                                    else if (returnPathCopy == "updateName")
-                                        EditTeam.updateNameResponse(responseString);
-                                    else if (returnPathCopy == "updateManager")
-                                        EditTeam.updateManagerResponse(responseString);
                                 } else {
                                     try {
                                         Thread.sleep(2000);

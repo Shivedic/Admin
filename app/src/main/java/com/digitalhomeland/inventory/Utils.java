@@ -1,4 +1,4 @@
-package com.digitalhomeland.storeadmin;
+package com.digitalhomeland.inventory;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

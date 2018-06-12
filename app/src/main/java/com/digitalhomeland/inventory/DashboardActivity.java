@@ -1,19 +1,14 @@
-package com.digitalhomeland.storeadmin;
+package com.digitalhomeland.inventory;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,20 +24,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.digitalhomeland.storeadmin.models.Application;
-import com.digitalhomeland.storeadmin.models.EmpRoster;
-import com.digitalhomeland.storeadmin.models.Employee;
-import com.digitalhomeland.storeadmin.models.LocationObj;
-import com.digitalhomeland.storeadmin.models.Notif;
-import com.digitalhomeland.storeadmin.models.StRoster;
-import com.digitalhomeland.storeadmin.models.Store;
-import com.digitalhomeland.storeadmin.models.Team;
+import com.digitalhomeland.inventory.models.Employee;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -69,11 +56,6 @@ public class DashboardActivity extends AppCompatActivity{
         //db.deleteAppli();
         //db.deleteTasks();
         //db.deleteEmployees();
-        for (Team tl:
-                db.getAllTeams()    ) {
-            Team td = db.getTeamByName(tl.getName());
-            Log.d("myTag","team name  : " + td.getName());
-        }
         getWindow().setBackgroundDrawableResource(R.drawable.btr);
         Calendar currCal = Calendar.getInstance();
         if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -132,6 +114,7 @@ public class DashboardActivity extends AppCompatActivity{
             }
         });
 
+        /*
         Button editTeam = (Button) findViewById(R.id.edit_teams);
         editTeam.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,59 +124,17 @@ public class DashboardActivity extends AppCompatActivity{
 
                             }
         });
-
+        */
     }
 
-    public static void addTeamResponse(String responseString){
-        try {
-            JSONObject responseObj = new JSONObject(responseString);
-
-            //Store storeRes = new Store(responseObj.getString("_id"),responseObj.getString("storeId"),responseObj.getString("name"),responseObj.getString("city"),responseObj.getString("state"),responseObj.getString("lat"),responseObj.getString("longi"),responseObj.getString("address"),responseObj.getString("empCount"));
-            Team team = new Team(responseObj.getString("_id"), responseObj.getString("teamName"), "","");
-            db.addTeam(team);
-            new SweetAlertDialog(mContext, SweetAlertDialog.SUCCESS_TYPE)
-                    .setTitleText("Great Job!")
-                    .setContentText("Team added successfully")
-                    .setConfirmText("Congratulations!")
-                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sDialog) {
-                            sDialog.dismissWithAnimation();
-                        }
-                    })
-                    .show();
-
-        }catch(JSONException e){
-            Log.d("myTag", "Json exception : ", e);
-        }
-    }
-
-    public static void getUnapprovedResponse(String response){
-        try {
-            JSONObject responeObj = new JSONObject(response);
-            JSONArray unappEmpArr = responeObj.getJSONArray("employees");
-            for (int i = 0; i < unappEmpArr.length(); i++) {
-                JSONObject empEle = (JSONObject) unappEmpArr.get(i);
-                    Employee notifObj = new Employee(empEle.getString("_id"), empEle.getString("firstName"), empEle.getString("middleName"), empEle.getString("lastName"), empEle.getString("phone"), empEle.getString("email"), empEle.getString("aadharId"), empEle.getString("employeeId"), empEle.getString("isManager"));
-                if(!db.checkEmpExists(empEle.getString("employeeId"))) {
-                    db.addEmployees(notifObj);
-                }
-                //showNotificationNotif(notifObj, i * i);
-            }
-            Intent i = new Intent(mActivity, UnapprovedView.class);
-            mActivity.startActivity(i);
-        }catch(JSONException ex){
-            Log.d("myTag", "Json exception : ", ex);
-        }
-    }
-
+    /*
     public static void requestNotifs(String empid){
         String requestNotif = "{\"reciever\":\"EmpRead\", \"params\":{\"storeId\":\"" + db.getStore().getStoreId() + "\",\"seqId\":\"" + db.getNotifSeq("B") + "\"}}";
         Log.d("myTag", "requestNotif : " + requestNotif);
         postRequest = new Volley_Request();
         postRequest.createRequest(mActivity, mActivity.getResources().getString(R.string.mJSONURL_notifb), "POST", "loadNotifbSync",requestNotif);
     }
-
+*/
 
 
     @Override

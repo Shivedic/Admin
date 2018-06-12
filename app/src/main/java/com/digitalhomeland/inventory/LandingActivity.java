@@ -1,4 +1,4 @@
-package com.digitalhomeland.storeadmin;
+package com.digitalhomeland.inventory;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,7 +22,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.digitalhomeland.storeadmin.models.Store;
+import com.digitalhomeland.inventory.models.Store;
 
 import org.json.JSONException;
 import org.json.JSONObject;

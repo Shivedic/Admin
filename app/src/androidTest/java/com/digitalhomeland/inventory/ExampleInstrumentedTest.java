@@ -1,4 +1,4 @@
-package com.digitalhomeland.storeadmin;
+package com.digitalhomeland.inventory;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

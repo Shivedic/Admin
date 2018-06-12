@@ -1,4 +1,4 @@
-package com.digitalhomeland.storeadmin;
+package com.digitalhomeland.inventory;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,19 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.digitalhomeland.storeadmin.models.Application;
-import com.digitalhomeland.storeadmin.models.Attendance;
-import com.digitalhomeland.storeadmin.models.EmpRoster;
-import com.digitalhomeland.storeadmin.models.Employee;
-import com.digitalhomeland.storeadmin.models.Notif;
-import com.digitalhomeland.storeadmin.models.StRoster;
-import com.digitalhomeland.storeadmin.models.Store;
-import com.digitalhomeland.storeadmin.models.TaskInst;
-import com.digitalhomeland.storeadmin.models.Taskd;
-import com.digitalhomeland.storeadmin.models.Tasko;
-import com.digitalhomeland.storeadmin.models.Taskw;
-import com.digitalhomeland.storeadmin.models.Team;
-import com.digitalhomeland.storeadmin.models.User;
+import com.digitalhomeland.inventory.models.Employee;
+import com.digitalhomeland.inventory.models.Store;
+import com.digitalhomeland.inventory.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +23,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 48;
+    private static final int DATABASE_VERSION = 49;
 
     // Database Name
     private static final String DATABASE_NAME = "employeeDB";
@@ -276,95 +266,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * All CRUD(Create, Read, Update, Delete) Operations
      */
 
-
-    // Adding new notifications
-    void addNotif(Notif notif) {
-        try{
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(KEY_ID, notif.getId()); // Contact Name
-            values.put(KEY_NTYPE, notif.getType());
-            values.put(KEY_TITLE, notif.getTitle()); // Contact Name
-        values.put(KEY_SUBJECT, notif.getSubject()); // Contact Phone
-        values.put(KEY_DATE, notif.getDate()); // Contact Name
-        values.put(KEY_NEID, notif.getEmployeeId());
-        values.put(KEY_NSEQID, notif.getSeqId());
-
-        // Inserting Row
-
-        long rowinsert =  db.insertOrThrow(TABLE_NOTIFICATION, null, values);
-        Log.d("myTag" ,"rowinsert"+ rowinsert);
-        db.close(); // Closing database connection
-    }catch(Exception e){ Log.d("myTag", "err" + e.toString() + "\n" +  e.getMessage() + "\n" + e.getCause() + "\n" + e.getStackTrace() );
-            Log.d("myTag", "err lol ", e);
-    e.printStackTrace();
-    }
-    }
-
-    // Adding new notifications
-    void addAttendance(Attendance attendance) {
-        try{
-            SQLiteDatabase db = this.getWritableDatabase();
-
-            ContentValues values = new ContentValues();
-            values.put(KEY_VALUE, attendance.getValue()); // Contact Phone
-            values.put(KEY_DATEINST, attendance.getDate()); // Contact Name
-            values.put(KEY_AEMPID , attendance.getEmployeeId());
-            // Inserting Row
-
-            long rowinsert =  db.insertOrThrow(TABLE_ATTENDANCE, null, values);
-            Log.d("myTag" ,"rowinsert"+ rowinsert);
-            db.close(); // Closing database connection
-        }catch(Exception e){ Log.d("myTag", "err" + e.toString() + "\n" +  e.getMessage() + "\n" + e.getCause() + "\n" + e.getStackTrace() );
-            Log.d("myTag", "err lol ", e);
-            e.printStackTrace();
-        }
-    }
-
-    // Adding new notifications
-    void addTeam(Team team) {
-        try{
-            SQLiteDatabase db = this.getWritableDatabase();
-
-            ContentValues values = new ContentValues();
-            values.put(KEY_TID, team.getId()); // Contact Phone
-            values.put(KEY_TNAME, team.getName()); // Contact Name
-            values.put(KEY_TMANAGERID , team.getManagerId());
-            values.put(KEY_TMANAGERNAME , team.getManagerName());
-            // Inserting Row
-            long rowinsert =  db.insertOrThrow(TABLE_TEAM, null, values);
-            Log.d("myTag" ,"rowinsert"+ rowinsert);
-            db.close(); // Closing database connection
-        }catch(Exception e){ Log.d("myTag", "err" + e.toString() + "\n" +  e.getMessage() + "\n" + e.getCause() + "\n" + e.getStackTrace() );
-            Log.d("myTag", "err lol ", e);
-            e.printStackTrace();
-        }
-    }
-
-    // Adding new applications
-    void addApplications(Application application) {
-        try{
-            SQLiteDatabase db = this.getWritableDatabase();
-Log.d("myTag", "adding appli db : " + application.getSubject() + " : " + application.getDate() + " : " + application.getTitle());
-            ContentValues values = new ContentValues();
-            values.put(KEY_AID, application.getId()); // Contact Name
-            values.put(KEY_ACCEPTANCE, application.getAcceptStatus()); // Contact Phone
-            values.put(KEY_ATITLE, application.getTitle()); // Contact Name
-            values.put(KEY_ASUBJECT, application.getSubject()); // Contact Phone
-            values.put(KEY_ADATE, application.getDate()); // Contact Name
-            values.put(KEY_AEID, application.getEmployeeId());
-            // Inserting Row
-
-            long rowinsert =  db.insertOrThrow(TABLE_APPLICATIONS, null, values);
-            Log.d("myTag" ,"rowinsert"+ rowinsert);
-            db.close(); // Closing database connection
-        }catch(Exception e){ Log.d("myTag", "err" + e.toString() + "\n" +  e.getMessage() + "\n" + e.getCause() + "\n" + e.getStackTrace() );
-            Log.d("myTag", "err lol ", e);
-            e.printStackTrace();
-        }
-    }
-
     // Adding new user
     void addUsers(User user) {
         try{
@@ -447,135 +348,6 @@ Log.d("myTag", "adding appli db : " + application.getSubject() + " : " + applica
         }
     }
 
-    // Adding new notifications
-    void addTaskd(Taskd tsk) {
-        try{
-            SQLiteDatabase db = this.getWritableDatabase();
-
-            ContentValues values = new ContentValues();
-            values.put(KEY_DID, tsk.get_id()); // Contact Name
-            values.put(KEY_DDATE, tsk.getDate());
-            values.put(KEY_DEMPID, tsk.getEmpId()); // Contact Phone
-            values.put(KEY_DTITLE, tsk.getTitle()); // Contact Name
-            values.put(KEY_DSUBJECT, tsk.getSubject()); // Contact Phone
-            values.put(KEY_DHOURS, tsk.getHours()); // Contact Name
-            values.put(KEY_DMINS, tsk.getMinutes());
-            values.put(KEY_DACCEPTEDAT, tsk.getAcceptedAt());
-            values.put(KEY_DSEQID, tsk.getSeqId());
-
-            // Inserting Row
-
-            long rowinsert =  db.insertOrThrow(TABLE_TASKD, null, values);
-            Log.d("myTag" ,"rowinsert"+ rowinsert);
-            db.close(); // Closing database connection
-        }catch(Exception e){ Log.d("myTag", "err" + e.toString() + "\n" +  e.getMessage() + "\n" + e.getCause() + "\n" + e.getStackTrace() );
-            Log.d("myTag", "err lol ", e);
-            e.printStackTrace();
-        }
-    }
-
-    // Adding new notifications
-    void addTaskw(Taskw tsk) {
-        try{
-            SQLiteDatabase db = this.getWritableDatabase();
-
-            ContentValues values = new ContentValues();
-            values.put(KEY_WID, tsk.getId()); // Contact Name
-            values.put(KEY_WDATE, tsk.getDate());
-            values.put(KEY_WEMPID, tsk.getEmpId()); // Contact Phone
-            values.put(KEY_WTITLE, tsk.getTitle()); // Contact Name
-            values.put(KEY_WSUBJECT, tsk.getSubject()); // Contact Phone
-            values.put(KEY_WHOURS, tsk.getHours()); // Contact Name
-            values.put(KEY_WMINS, tsk.getMinutes());
-            values.put(KEY_WDAYOFWEEK, tsk.getDayOfWeek());
-            values.put(KEY_WACCEPTEDAT, tsk.getAcceptedAt());
-            values.put(KEY_WSEQID, tsk.getSeqId());
-
-            // Inserting Row
-
-            long rowinsert =  db.insertOrThrow(TABLE_TASKW, null, values);
-            Log.d("myTag" ,"rowinsert"+ rowinsert);
-            db.close(); // Closing database connection
-        }catch(Exception e){ Log.d("myTag", "err" + e.toString() + "\n" +  e.getMessage() + "\n" + e.getCause() + "\n" + e.getStackTrace() );
-            Log.d("myTag", "err lol ", e);
-            e.printStackTrace();
-        }
-    }
-
-    // Adding new notifications
-    void addTasko(Tasko tsk) {
-        try{
-            SQLiteDatabase db = this.getWritableDatabase();
-
-            ContentValues values = new ContentValues();
-            values.put(KEY_OID, tsk.getId()); // Contact Name
-            values.put(KEY_OEMPID, tsk.getEmpId()); // Contact Phone
-            values.put(KEY_OTITLE, tsk.getTitle()); // Contact Name
-            values.put(KEY_OSUBJECT, tsk.getSubject()); // Contact Phone
-            values.put(KEY_OHOURS, tsk.getHours()); // Contact Name
-            values.put(KEY_OMINS, tsk.getMinutes());
-            values.put(KEY_ODATETOSET, tsk.getDateToSet());
-            values.put(KEY_OACCEPTEDAT, tsk.getAcceptedAt());
-            values.put(KEY_OSEQID, tsk.getSeqId());
-
-            // Inserting Row
-
-            long rowinsert =  db.insertOrThrow(TABLE_TASKO, null, values);
-            Log.d("myTag" ,"rowinsert"+ rowinsert);
-            db.close(); // Closing database connection
-        }catch(Exception e){ Log.d("myTag", "err" + e.toString() + "\n" +  e.getMessage() + "\n" + e.getCause() + "\n" + e.getStackTrace() );
-            Log.d("myTag", "err lol ", e);
-            e.printStackTrace();
-        }
-    }
-
-    // Adding new user
-    void addSTRoster(StRoster str) {
-        try{
-            SQLiteDatabase db = this.getWritableDatabase();
-            //Log.d("myTag", "adding user db : " + school.getName() + " : " + school.getSchoolId() + " : " + school.getCity());
-            ContentValues values = new ContentValues();
-            values.put(KEY_STRID, ""); // Contact Name
-            values.put(KEY_STRDOFW, str.getDayOfw()); // Contact Phone
-            values.put(KEY_STRDATE, str.getDate()); // Contact Name
-            values.put(KEY_STRSTATUS, str.getStoreStatus()); // Contact Name
-            values.put(KEY_STREVENTS , str.getEvents()); // Contact Phone
-            values.put(KEY_STREVENTSTIT , str.getEventTitle()); // Contact Name
-            values.put(KEY_STREVENTSUB , str.getEventSub()); // Contact Name
-            values.put(KEY_STRSEQID , "");
-            values.put(KEY_STRPUSHED , str.getPushed()); // Contact Name
-            // Inserting Row
-            long rowinsert =  db.insertOrThrow(TABLE_STROSTER, null, values);
-            Log.d("myTag" ,"rowinsert"+ rowinsert);
-            db.close(); // Closing database connection
-        }catch(Exception e){ Log.d("myTag", "err" + e.toString() + "\n" +  e.getMessage() + "\n" + e.getCause() + "\n" + e.getStackTrace() );
-            Log.d("myTag", "err lol ", e);
-            e.printStackTrace();
-        }
-    }
-
-    public StRoster getSTRosterByDate(String date){
-        SQLiteDatabase db = this.getReadableDatabase();
-        StRoster str = null;
-        String where = KEY_STRDATE + "= ?";
-        Log.d("myTag", "searching for date : " + date);
-        String[] whereArgs = {date};
-        Cursor cursor = db.query(TABLE_STROSTER,new String[]{KEY_STRDOFW,KEY_STRDATE,KEY_STRSTATUS, KEY_STREVENTS,KEY_STREVENTSTIT, KEY_STREVENTSUB} ,where, whereArgs, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                Log.d("myTag", "setting store : " + ""+" : "+ cursor.getString(0)+" : "+ cursor.getString(1) +" : "+cursor.getString(2)+" : "+ cursor.getString(3)+" : "+ cursor.getString(4) +" : "+ cursor.getString(5));
-                str = new StRoster("", cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        if(str != null) {
-            Log.d("myTag", "returning : " + str.getInString());
-            return str;
-        }
-        return null;
-    }
-
-
     public Boolean containsSTR(String date, String id){
         SQLiteDatabase db = this.getReadableDatabase();
         String where = KEY_STRDATE + "= ? AND " + KEY_STRID + "= ?";
@@ -611,30 +383,6 @@ Log.d("myTag", "adding appli db : " + application.getSubject() + " : " + applica
     }
 
 
-    // Adding new user
-    void addEmpRoster(EmpRoster str) {
-        try{
-            SQLiteDatabase db = this.getWritableDatabase();
-            //Log.d("myTag", "adding user db : " + school.getName() + " : " + school.getSchoolId() + " : " + school.getCity());
-            ContentValues values = new ContentValues();
-            values.put(KEY_EMRID, ""); // Contact Name
-            values.put(KEY_EMRDOFW, str.getDayOfw()); // Contact Phone
-            values.put(KEY_EMREMPID, str.getEmpId()); // Contact Phone
-            values.put(KEY_EMRDATE, str.getDate()); // Contact Name
-            values.put(KEY_EMRSTATUS, str.getEmpStatus()); // Contact Name
-            values.put(KEY_EMRSHIFT , str.getShift()); // Contact Phone
-            values.put(KEY_EMRPUSHED , str.getPushed()); // Contact Phone
-            // Inserting Row
-
-            long rowinsert =  db.insertOrThrow(TABLE_EMPROSTER, null, values);
-            Log.d("myTag" ,"rowinsert"+ rowinsert);
-            db.close(); // Closing database connection
-        }catch(Exception e){ Log.d("myTag", "err" + e.toString() + "\n" +  e.getMessage() + "\n" + e.getCause() + "\n" + e.getStackTrace() );
-            Log.d("myTag", "err lol ", e);
-            e.printStackTrace();
-        }
-    }
-
     public void viewAllEmpRoster() {
         String selectQuery = "SELECT  * FROM " + TABLE_EMPROSTER ;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -648,47 +396,6 @@ Log.d("myTag", "adding appli db : " + application.getSubject() + " : " + applica
         }
         // return contact list
     }
-
-
-    public EmpRoster getEmpRosterByDate(String date){
-        try{
-        SQLiteDatabase db = this.getReadableDatabase();
-        EmpRoster str = null;
-        String where = KEY_EMRDATE + "= ?";
-        String[] whereArgs = {date};
-        Cursor cursor = db.query(TABLE_EMPROSTER,new String[]{KEY_EMRID,KEY_EMRDOFW,KEY_EMRDATE, KEY_EMREMPID,KEY_EMRSTATUS, KEY_EMRSHIFT} ,where, whereArgs, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                Log.d("myTag", "emr : " + cursor.getString(0) + " : " + cursor.getString(1)+ " : " + cursor.getString(2)+ " : " + cursor.getString(3)+ " : " + cursor.getString(4)+ " : " +cursor.getString(5));
-                str = new EmpRoster(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),cursor.getString(5));
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        if(str != null) {
-            return str;
-        }} catch (SQLException e){Log.d("myTag", "err lol : " , e);}
-        return null;
-    }
-
-    public EmpRoster getEmpRosterByDate(String date, String empId){
-        SQLiteDatabase db = this.getReadableDatabase();
-        EmpRoster str = null;
-        String where = KEY_STRDATE + "= ? AND " + KEY_EMREMPID + "= ?";
-        String[] whereArgs = {date, empId};
-        Cursor cursor = db.query(TABLE_EMPROSTER,new String[]{KEY_EMRID,KEY_EMRDOFW,KEY_EMRDATE, KEY_EMREMPID,KEY_EMRSTATUS, KEY_EMRSHIFT, KEY_EMRCHECKIN, KEY_EMRCHECKOUT} ,where, whereArgs, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                str = new EmpRoster(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getString(7));
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        if(str != null) {
-            return str;
-        }
-        return null;
-    }
-
-
 
     /*
     // Getting notifications Count later for multiple students
@@ -813,125 +520,6 @@ Log.d("myTag", "adding appli db : " + application.getSubject() + " : " + applica
         return counter;
     }
 
-    public Taskd getTaskdById(String applicationId){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Taskd tsk = null;
-        String where = KEY_DID + "= ?";
-        String[] whereArgs = {applicationId};
-        Cursor cursor = db.query(TABLE_TASKD,new String[]{KEY_DID,KEY_DDATE, KEY_DTITLE, KEY_DSUBJECT, KEY_DEMPID, KEY_DHOURS, KEY_DMINS,KEY_DSEQID} ,where, whereArgs, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                tsk = new Taskd(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getString(7));
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        if(tsk != null) {
-            return tsk;
-        }
-        return null;
-    }
-
-    public ArrayList<TaskInst> getTaskdByDate(String date){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Taskd tsk = null;
-        ArrayList<TaskInst> tList = new ArrayList<>();
-        String where = KEY_DDATE + "= ?";
-        String[] whereArgs = {date};
-        Cursor cursor = db.query(TABLE_TASKD,new String[]{KEY_DID,KEY_DDATE, KEY_DTITLE, KEY_DSUBJECT, KEY_DEMPID, KEY_DHOURS, KEY_DMINS,KEY_DSEQID, KEY_DACCEPTEDAT} ,where, whereArgs, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                Log.d("myTag", "setting accepted : " + cursor.getString(8));
-                tsk = new Taskd(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getString(7),cursor.getString(8));
-                TaskInst tmp = new TaskInst(tsk);
-                tList.add(tmp);
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        if(tList.size() != 0) {
-            return tList;
-        }
-        return null;
-    }
-
-
-    public Taskw getTaskwById(String Id){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Taskw tsk = null;
-        String where = KEY_WID + "= ?";
-        String[] whereArgs = {Id};
-        Cursor cursor = db.query(TABLE_TASKW,new String[]{KEY_WID,KEY_WDATE, KEY_WTITLE, KEY_WSUBJECT, KEY_WEMPID, KEY_WHOURS, KEY_WMINS,KEY_WDAYOFWEEK, KEY_WSEQID} ,where, whereArgs, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                tsk = new Taskw(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getString(7),cursor.getString(8));
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        if(tsk != null) {
-            return tsk;
-        }
-        return null;
-    }
-
-    public ArrayList<TaskInst> getTaskwByDate(String date){
-        SQLiteDatabase db = this.getReadableDatabase();
-        ArrayList<TaskInst> tList = new ArrayList<>();
-        Taskw tsk = null;
-        String where = KEY_WDATE + "= ?";
-        String[] whereArgs = {date};
-        Cursor cursor = db.query(TABLE_TASKW,new String[]{KEY_WID,KEY_WDATE, KEY_WTITLE, KEY_WSUBJECT, KEY_WEMPID, KEY_WHOURS, KEY_WMINS,KEY_WDAYOFWEEK, KEY_WSEQID} ,where, whereArgs, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                tsk = new Taskw(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getString(7),cursor.getString(8));
-                TaskInst tmp = new TaskInst(tsk);
-                tList.add(tmp);
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        if(tList.size() != 0) {
-            return tList;
-        }
-        return null;
-    }
-
-    public Tasko getTaskoById(String Id){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Tasko tsk = null;
-        String where = KEY_OID + "= ?";
-        String[] whereArgs = {Id};
-        Cursor cursor = db.query(TABLE_TASKO,new String[]{KEY_OID, KEY_OTITLE, KEY_OSUBJECT, KEY_OEMPID, KEY_OHOURS, KEY_OMINS,KEY_ODATETOSET,KEY_OACCEPTEDAT, KEY_WSEQID} ,where, whereArgs, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                tsk = new Tasko(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getString(7),cursor.getString(8));
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        if(tsk != null) {
-            return tsk;
-        }
-        return null;
-    }
-
-    public ArrayList<TaskInst> getTaskoByDate(String date){
-        SQLiteDatabase db = this.getReadableDatabase();
-        ArrayList<TaskInst> tList = new ArrayList<>();
-        Tasko tsk = null;
-        String where = KEY_ODATETOSET + "= ?";
-        String[] whereArgs = {date};
-        Cursor cursor = db.query(TABLE_TASKO,new String[]{KEY_OID, KEY_OTITLE, KEY_OSUBJECT, KEY_OEMPID, KEY_OHOURS, KEY_OMINS,KEY_ODATETOSET,KEY_OACCEPTEDAT, KEY_WSEQID} ,where, whereArgs, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                tsk = new Tasko(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getString(7),cursor.getString(8));
-                TaskInst tmp = new TaskInst(tsk);
-                tList.add(tmp);
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        if(tList.size() != 0) {
-            return tList;
-        }
-        return null;
-    }
-
     public User getUser(){
         User userObj = null;
         String selectQuery = "SELECT  * FROM " + TABLE_USER;
@@ -1030,41 +618,6 @@ Log.d("myTag", "adding appli db : " + application.getSubject() + " : " + applica
         return count;
     }
 
-
-    public ArrayList<Team> getAllTeams(){
-        ArrayList<Team> teamList = new ArrayList<Team>();
-        String selectQuery = "SELECT  * FROM " + TABLE_TEAM;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Team team = new Team(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
-                teamList.add(team);
-                Log.d("myTag",cursor.getString(0) + " : " + cursor.getString(1) + " : "  + cursor.getString(2) + " : " + cursor.getString(3) );
-            } while (cursor.moveToNext());
-        }
-        return teamList;
-    }
-
-    public Team getTeamByName(String teamName){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Team team = null;
-        String where = KEY_TNAME + "= ?";
-        String[] whereArgs = {teamName};
-        Cursor cursor = db.query(TABLE_TEAM,new String[]{KEY_TID,KEY_TNAME,KEY_TMANAGERID,KEY_TMANAGERNAME} ,where, whereArgs, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                Log.d("myTag", "getting employee : " + cursor.getString(0)+" : "+ cursor.getString(1)+" : "+ cursor.getString(2) +" : "+cursor.getString(3));
-                team = new Team(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        return team;
-    }
-
     public  Store getStore(){
         Store storeObj = null;
         String selectQuery = "SELECT  * FROM " + TABLE_STORE;
@@ -1081,133 +634,6 @@ Log.d("myTag", "adding appli db : " + application.getSubject() + " : " + applica
             } while (cursor.moveToNext());
         }
         return storeObj;
-    }
-
-    // Getting All Contacts
-    public ArrayList<Notif> getAllNotifications(int limit , int offset) {
-        ArrayList<Notif> notifList = new ArrayList<Notif>();
-        // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_NOTIFICATION + " ORDER BY (" + KEY_NSEQID + ") DESC";
-                //+ " LIMIT " + limit;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Notif notification = new Notif();
-               // Log.d("myTag","db lol notif : " + cursor.getString(0) + " : " + cursor.getString(1) + " : "  + cursor.getString(2) + " : " + cursor.getString(3) + " : " + cursor.getString(4) + " : " + cursor.getString(5));
-                notification.setTitle(cursor.getString(2));
-                notification.setSubject(cursor.getString(3));
-                notification.setDate(cursor.getString(5));
-                // Adding contact to list
-                notifList.add(notification);
-            } while (cursor.moveToNext());
-        }
-
-        // return contact list
-        return notifList;
-    }
-
-    // Getting All Contacts
-    public String getNotifSeq(String type) {
-        ArrayList<Notif> notifList = new ArrayList<Notif>();
-        // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_NOTIFICATION + " ORDER BY (" + KEY_NSEQID + ") DESC";
-        //+ " LIMIT " + limit;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-String maxSeq = "0";
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                if(cursor.getString(1).equals(type)){
-                    if(Integer.parseInt(cursor.getString(6)) > Integer.parseInt(maxSeq))
-                        maxSeq = cursor.getString(6);
-                }
-            } while (cursor.moveToNext());
-        }
-
-        // return contact list
-        return maxSeq;
-    }
-
-
-    // Getting All Attendance
-    public ArrayList<Attendance> getAllAttendance(int limit, int offset) {
-        ArrayList<Attendance> attendanceList = new ArrayList<Attendance>();
-        // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_ATTENDANCE + " LIMIT "+ limit;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Attendance attendance = new Attendance();
-                Log.d("myTag",cursor.getString(0) + " : " + cursor.getString(2));
-                attendance.setDate(cursor.getString(2));
-                attendance.setValue(cursor.getString(0));
-                // Adding contact to list
-                attendanceList.add(attendance);
-            } while (cursor.moveToNext());
-        }
-
-        // return contact list
-        return attendanceList;
-    }
-
-    // Getting All Attendance
-    public ArrayList<Application> getAllApplications(int limit, int offset) {
-        ArrayList<Application> applicationList = new ArrayList<Application>();
-        // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_APPLICATIONS ;
-                //+ " LIMIT " + limit;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Application application;
-                if(cursor.getString(1).equals("")) {
-                    application = new Application(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(5), cursor.getString(4));
-                    Log.d("myTag", "getting appli : " + cursor.getString(0) + " : " + cursor.getString(1) + " : " + cursor.getString(2) + " : " + cursor.getString(3) + " : " + cursor.getString(4) + " : " + cursor.getString(5));
-                }else {
-                    application = new Application(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(5), cursor.getString(4),"");
-                    Log.d("myTag", "getting appli : " + cursor.getString(0) + " : " + cursor.getString(1) + " : " + cursor.getString(2) + " : " + cursor.getString(3) + " : " + cursor.getString(4) + " : " + cursor.getString(5) + " : " + cursor.getString(6));
-                }
-                    applicationList.add(application);
-            } while (cursor.moveToNext());
-        }
-        // return contact list
-        return applicationList;
-    }
-
-    // Getting All Attendance
-    public ArrayList<Taskd> getAllTaskd(int limit, int offset) {
-        ArrayList<Taskd> taskdList = new ArrayList<>();
-        // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_TASKD ;
-        //+ " LIMIT " + limit;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Taskd tsk = new Taskd(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5), cursor.getString(6), cursor.getString(6));
-                Log.d("myTag","getting appli : " + cursor.getString(0) + " : " + cursor.getString(1) + " : " + cursor.getString(2) + " : " + cursor.getString(3) + " : " + cursor.getString(4));
-                taskdList.add(tsk);
-            } while (cursor.moveToNext());
-        }
-        // return contact list
-        return taskdList;
     }
 
     public int addManagerTOTeam(String empId, String managerName, String name){
@@ -1285,24 +711,6 @@ String maxSeq = "0";
         } finally {
             cursor.close();
         }
-    }
-
-    public Application getApplicationById(String applicationId){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Application application = null;
-        String where = KEY_AID + "= ?";
-        String[] whereArgs = {applicationId};
-        Cursor cursor = db.query(TABLE_APPLICATIONS,new String[]{KEY_AID, KEY_ACCEPTANCE, KEY_ATITLE, KEY_ASUBJECT, KEY_ADATE, KEY_AEID} ,where, whereArgs, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                application =  new Application(cursor.getString(0), cursor.getString(1), cursor.getString(2),cursor.getString(3),cursor.getString(4), cursor.getString(5));
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        if(application != null) {
-            return application;
-        }
-        return null;
     }
 
     public void updateApplicationAcceptStatus(String applicationId, String acceptStatus){

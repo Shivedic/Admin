@@ -1,4 +1,4 @@
-package com.digitalhomeland.storeadmin.models;
+package com.digitalhomeland.inventory.models;
 
 /**
  * Created by Asus on 1/11/2018.
